@@ -110,7 +110,7 @@ export default function DonatePage() {
                 {amount === 'custom' && (
                   <div className="mb-6 relative">
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-bold">$</span>
-                    <input type="number" min="1" placeholder="Enter amount" value={customAmount} onChange={(e) => setCustomAmount(e.target.value)} required className="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-bold" />
+                    <input type="number" min="1" placeholder="Enter amount" value={customAmount} onChange={(e) => setCustomAmount(e.target.value)} required className="w-full pl-8 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 font-bold text-gray-900" />
                   </div>
                 )}
 
@@ -136,18 +136,18 @@ export default function DonatePage() {
                 <div className="space-y-4 mb-8">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-gray-900" />
                   </div>
                   <div className="relative">
                     <label className="block text-sm font-medium text-gray-700 mb-1">Card Details (Demo)</label>
                     <div className="flex border border-gray-200 rounded-xl overflow-hidden focus-within:ring-2 focus-within:ring-emerald-500">
-                      <input type="text" placeholder="Card number" className="w-full px-4 py-3 outline-none" required />
-                      <input type="text" placeholder="MM/YY" className="w-24 px-4 py-3 border-l border-gray-200 outline-none" required />
-                      <input type="text" placeholder="CVC" className="w-20 px-4 py-3 border-l border-gray-200 outline-none" required />
+                      <input type="text" placeholder="Card number" className="w-full px-4 py-3 outline-none text-gray-900" required />
+                      <input type="text" placeholder="MM/YY" className="w-24 px-4 py-3 border-l border-gray-200 outline-none text-gray-900" required />
+                      <input type="text" placeholder="CVC" className="w-20 px-4 py-3 border-l border-gray-200 outline-none text-gray-900" required />
                     </div>
                   </div>
                 </div>
