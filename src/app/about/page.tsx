@@ -118,11 +118,45 @@ export default function AboutPage() {
       </section>
 
       {/* Careers Section */}
-      <section id="careers" className="py-24 bg-emerald-900 text-white text-center">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold mb-6">Join Our Team</h2>
-          <p className="text-xl text-emerald-100 mb-8">We are always looking for passionate individuals to help us drive global change. Check back soon for open positions or send your resume to our general inbox.</p>
-          <a href="mailto:careers@globalimpact.example.com" className="inline-flex h-14 items-center justify-center rounded-full bg-white px-8 text-lg font-bold text-emerald-900 transition-transform hover:scale-105">View Open Roles</a>
+      <section id="careers" className="py-24 bg-emerald-900 text-white">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-14">
+            <h2 className="text-3xl font-bold mb-4">Join Our Team</h2>
+            <p className="text-xl text-emerald-100 max-w-2xl mx-auto">We are always looking for passionate individuals to help us drive global change. Apply today and be part of something bigger.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            {[
+              { role: 'Field Program Manager', location: 'Nairobi, Kenya', type: 'Full-time', dept: 'Programs' },
+              { role: 'Digital Marketing Specialist', location: 'Remote', type: 'Full-time', dept: 'Marketing' },
+              { role: 'Water & Sanitation Engineer', location: 'Jakarta, Indonesia', type: 'Contract', dept: 'Engineering' },
+              { role: 'Community Outreach Coordinator', location: 'Mumbai, India', type: 'Full-time', dept: 'Partnerships' },
+            ].map((job) => (
+              <div key={job.role} className="bg-emerald-800/60 border border-emerald-700 rounded-2xl p-6 flex flex-col gap-4 hover:border-emerald-400 transition-colors">
+                <div>
+                  <span className="inline-block text-xs font-bold bg-emerald-500/30 text-emerald-300 px-3 py-1 rounded-full mb-3">{job.dept}</span>
+                  <h3 className="text-lg font-bold text-white mb-1">{job.role}</h3>
+                  <p className="text-emerald-300 text-sm">{job.location} &middot; {job.type}</p>
+                </div>
+                <a
+                  href={`mailto:careers@globalimpact.example.com?subject=Application for ${encodeURIComponent(job.role)}`}
+                  className="inline-flex items-center justify-center h-10 rounded-full bg-white text-emerald-900 font-semibold text-sm px-6 transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+                >
+                  Apply Now
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <p className="text-emerald-200 mb-4">Don&apos;t see a role that fits? Send us your resume anyway.</p>
+            <a
+              href="mailto:careers@globalimpact.example.com?subject=General Application — GlobalImpact"
+              className="inline-flex h-12 items-center justify-center rounded-full border-2 border-white text-white font-semibold px-8 transition-transform hover:scale-105 hover:bg-white hover:text-emerald-900 active:scale-95"
+            >
+              Send General Application
+            </a>
+          </div>
         </div>
       </section>
     </div>

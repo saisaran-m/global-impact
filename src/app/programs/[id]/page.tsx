@@ -1,9 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { ArrowLeft, Target, Users, Calendar, MapPin, Share2 } from 'lucide-react';
+import { ArrowLeft, Target, Users, Calendar, MapPin, Share2, CheckCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 // Mock database (in a real app, this would be fetched from an API/CMS)
@@ -11,16 +10,42 @@ const ALL_PROGRAMS = [
   { id: 'education', category: 'Education', title: 'Education for All', desc: 'Providing school supplies and building classrooms in rural communities.', image: 'https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop', progress: 75, goal: '$50,000', raised: '$37,500', location: 'Sub-Saharan Africa', beneficiaries: '5,000+ Children', date: 'Ongoing' },
   { id: 'clean-water', category: 'Water', title: 'Clean Water Access', desc: 'Installing sustainable water filtration systems and wells in drought-prone areas.', image: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=2013&auto=format&fit=crop', progress: 45, goal: '$100,000', raised: '$45,000', location: 'Southeast Asia', beneficiaries: '10,000+ Families', date: 'Est. completion Dec 2026' },
   { id: 'healthcare', category: 'Health', title: 'Mobile Health Clinics', desc: 'Bringing essential medical care and vaccinations to remote villages.', image: 'https://images.unsplash.com/photo-1584515933487-779824d29309?q=80&w=2070&auto=format&fit=crop', progress: 90, goal: '$75,000', raised: '$67,500', location: 'South America', beneficiaries: '15,000+ Patients', date: 'Monthly Missions' },
+  { id: 'agriculture', category: 'Livelihood', title: 'Sustainable Farming', desc: 'Training farmers with modern techniques to increase crop yields organically.', image: 'https://images.unsplash.com/photo-1595841696650-dbf1d4310c34?q=80&w=2074&auto=format&fit=crop', progress: 30, goal: '$60,000', raised: '$18,000', location: 'East Africa', beneficiaries: '3,000+ Farmers', date: 'Est. completion Jun 2027' },
+  { id: 'disaster-relief', category: 'Emergency', title: 'Earthquake Relief', desc: 'Emergency response providing shelter, food, and medical aid to affected areas.', image: 'https://images.unsplash.com/photo-1469571486292-0ba58a3f068b?q=80&w=2070&auto=format&fit=crop', progress: 60, goal: '$200,000', raised: '$120,000', location: 'Central Asia', beneficiaries: '20,000+ Survivors', date: 'Active Emergency' },
+  { id: 'womens-empowerment', category: 'Livelihood', title: 'Women in Business', desc: 'Micro-loans and business training for women entrepreneurs in developing nations.', image: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=1974&auto=format&fit=crop', progress: 85, goal: '$80,000', raised: '$68,000', location: 'South Asia & West Africa', beneficiaries: '8,000+ Women', date: 'Ongoing' },
 ];
 
 export default function ProgramDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = React.use(params);
   const id = resolvedParams.id;
   const program = ALL_PROGRAMS.find(p => p.id === id);
+  const [shared, setShared] = useState(false);
+
+  const handleShare = async () => {
+    const url = typeof window !== 'undefined' ? window.location.href : '';
+    const shareData = {
+      title: program?.title ?? 'GlobalImpact Program',
+      text: program?.desc ?? 'Check out this program on GlobalImpact!',
+      url,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(url);
+        setShared(true);
+        setTimeout(() => setShared(false), 3000);
+      }
+    } catch {
+      await navigator.clipboard.writeText(url);
+      setShared(true);
+      setTimeout(() => setShared(false), 3000);
+    }
+  };
 
   if (!program) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center pt-24 pb-20 px-4 text-center">
+      <div className="min-h-screen bg-white flex flex-col items-center justify-center pt-24 pb-20 px-4 text-center">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">Program Not Found</h1>
         <p className="text-gray-600 mb-8">The program you are looking for does not exist or has been completed.</p>
         <Link href="/programs" className="text-emerald-600 font-medium hover:text-emerald-700">
@@ -131,8 +156,15 @@ export default function ProgramDetailPage({ params }: { params: Promise<{ id: st
                 Donate to this program
               </Link>
               
-              <button className="w-full flex items-center justify-center gap-2 h-12 rounded-full bg-gray-50 text-gray-700 font-medium border border-gray-200 hover:bg-gray-100 transition-colors">
-                <Share2 className="h-4 w-4" /> Share Initiative
+              <button
+                onClick={handleShare}
+                className="w-full flex items-center justify-center gap-2 h-12 rounded-full bg-gray-50 text-gray-700 font-medium border border-gray-200 hover:bg-gray-100 transition-colors"
+              >
+                {shared ? (
+                  <><CheckCircle className="h-4 w-4 text-emerald-600" /> <span className="text-emerald-600">Link Copied!</span></>
+                ) : (
+                  <><Share2 className="h-4 w-4" /> Share Initiative</>
+                )}
               </button>
             </div>
           </div>
