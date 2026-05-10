@@ -10,16 +10,40 @@ export default function DonatePage() {
   const [frequency, setFrequency] = useState<'once' | 'monthly'>('monthly');
   const [step, setStep] = useState(1); // 1: Amount, 2: Details, 3: Success
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleNext = (e: React.FormEvent) => {
     e.preventDefault();
     setStep(2);
   };
 
-  const handleDonate = (e: React.FormEvent) => {
+  const handleDonate = async (e: React.FormEvent) => {
     e.preventDefault();
-    setStep(3);
-    window.location.href = `mailto:${email}?subject=Thank you for your donation to GlobalImpact!&body=Dear Donor,%0A%0AWe have successfully received your donation of $${currentAmount}.%0A%0AThank you for making a difference!%0A%0A- GlobalImpact Team`;
+    setIsSubmitting(true);
+    
+    try {
+      const response = await fetch('/api/send-receipt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name,
+          amount: currentAmount,
+          frequency
+        })
+      });
+
+      if (!response.ok) throw new Error('Failed to send email');
+      
+      setStep(3);
+    } catch (error) {
+      console.error(error);
+      alert("Donation successful, but we couldn't send the receipt email. Please check your configuration.");
+      setStep(3); // Move to success anyway for demo purposes
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const currentAmount = amount === 'custom' ? (customAmount || '0') : amount.toString();
@@ -112,7 +136,7 @@ export default function DonatePage() {
                 <div className="space-y-4 mb-8">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
-                    <input type="text" required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500" />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
@@ -128,8 +152,8 @@ export default function DonatePage() {
                   </div>
                 </div>
 
-                <button type="submit" className="w-full h-14 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2">
-                  <Lock className="h-4 w-4" /> Complete Donation
+                <button type="submit" disabled={isSubmitting} className="w-full h-14 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed">
+                  <Lock className="h-4 w-4" /> {isSubmitting ? 'Processing...' : 'Complete Donation'}
                 </button>
                 <p className="text-xs text-gray-500 text-center mt-4">Secure encrypted payment. This is a hackathon demo.</p>
               </motion.form>
